@@ -13,6 +13,7 @@
 		D947C73D2595355C0026589E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D947C73C2595355C0026589E /* Preview Assets.xcassets */; };
 		D947C73F2595355C0026589E /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D947C73E2595355C0026589E /* Persistence.swift */; };
 		D947C7422595355D0026589E /* GarbageVision.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D947C7402595355C0026589E /* GarbageVision.xcdatamodeld */; };
+		D947C74B259538860026589E /* GarbageVisionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D947C74A259538860026589E /* GarbageVisionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D947C73E2595355C0026589E /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		D947C7412595355C0026589E /* GarbageVision.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GarbageVision.xcdatamodel; sourceTree = "<group>"; };
 		D947C7432595355D0026589E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D947C74A259538860026589E /* GarbageVisionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarbageVisionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				D947C7432595355D0026589E /* Info.plist */,
 				D947C7402595355C0026589E /* GarbageVision.xcdatamodeld */,
 				D947C73B2595355C0026589E /* Preview Content */,
+				D947C74A259538860026589E /* GarbageVisionView.swift */,
 			);
 			path = GarbageVision;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D947C74B259538860026589E /* GarbageVisionView.swift in Sources */,
 				D947C73F2595355C0026589E /* Persistence.swift in Sources */,
 				D947C7382595355C0026589E /* ContentView.swift in Sources */,
 				D947C7362595355C0026589E /* GarbageVisionApp.swift in Sources */,
