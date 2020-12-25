@@ -12,48 +12,103 @@ struct GarbageVisionView: View {
     @State
     private var showImageSources: Bool
 
+    @State
+    private var showImagePicker: Bool
+
+    @State
+    private var imagePickerSourceType: UIImagePickerController.SourceType
+
+    @State
+    private var image: UIImage?
+
     init() {
         self._showImageSources = .init(initialValue: false)
+        self._showImagePicker = .init(initialValue: false)
+        self._imagePickerSourceType = .init(initialValue: UIImagePickerController.SourceType.photoLibrary)
+        self.image = nil
     }
 
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer()
-                self.showImageSourcesButton()
-            }.navigationBarTitle("Select a Photo")
+            ZStack {
+                VStack {
+                    if let image = self.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 300)
+                            .padding()
+                        Spacer()
+                    } else {
+                        Text("Press the button below to identify garbage")
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .zIndex(0)
+                VStack {
+                    Spacer()
+                    self.identifyImageButton
+                        .actionSheet(isPresented: self.$showImageSources) {
+                            self.imageSources
+                        }
+                        .sheet(isPresented: self.$showImagePicker) {
+                            self.imagePicker
+                        }
+                }
+                .zIndex(1)
+            }
+            .navigationBarTitle("Garbage Vision")
         }
     }
 
-    func showImageSourcesButton() -> some View {
+    var identifyImageButton: some View {
         Button(action: {
             self.showImageSources = true
         }, label: {
-            Image(systemName: "viewfinder")
-                .font(.system(.title2))
-                .frame(width: 70, height: 70)
-                .foregroundColor(Color.white)
+            ZStack {
+                Image(systemName: "viewfinder")
+                    .font(.system(.largeTitle))
+                    .frame(width: 70, height: 70)
+                    .foregroundColor(Color.white)
+                Image(systemName: "trash.fill")
+                    .font(.system(.title3))
+                    .frame(width: 70, height: 70)
+                    .foregroundColor(Color.white)
+            }
         })
         .background(Color.blue)
         .cornerRadius(38.5)
-        .shadow(color: Color.black.opacity(0.3),
-                radius: 3,
-                x: 3,
-                y: 3)
-        .actionSheet(isPresented: self.$showImageSources) {
-            self.imageSources()
-        }
     }
 
-    func imageSources() -> ActionSheet {
-        ActionSheet(title: Text("Image Source"), buttons: [
-            .default(Text("Camera")) {
-                // TODO
-            },
-            .default(Text("File")) {
-                // TODO
-            },
-            .cancel()
-        ])
+    var imageSources: ActionSheet {
+        ActionSheet(title: Text("Image Source"), buttons: self.imageSourceOptions)
+    }
+
+    var imageSourceOptions: [ActionSheet.Button] {
+        var buttons = [ActionSheet.Button]()
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            buttons.append(.default(Text("Camera")) {
+                self.imagePickerSourceType = .camera
+                self.showImagePicker = true
+            })
+        }
+
+        buttons.append(.default(Text("File")) {
+            self.imagePickerSourceType = .photoLibrary
+            self.showImagePicker = true
+        })
+
+        buttons.append(.cancel())
+
+        return buttons
+    }
+
+    var imagePicker: ImagePicker {
+        ImagePicker(sourceType: self.imagePickerSourceType) { image in
+            self.image = image // TODO
+            self.showImagePicker = false
+        }
     }
 }
