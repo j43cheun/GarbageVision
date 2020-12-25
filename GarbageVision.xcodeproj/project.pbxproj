@@ -15,6 +15,7 @@
 		D947C7422595355D0026589E /* GarbageVision.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D947C7402595355C0026589E /* GarbageVision.xcdatamodeld */; };
 		D947C74B259538860026589E /* GarbageVisionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D947C74A259538860026589E /* GarbageVisionView.swift */; };
 		D947C74E25956D130026589E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D947C74D25956D130026589E /* ImagePicker.swift */; };
+		D947C751259587330026589E /* GarbageNet.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D947C750259587330026589E /* GarbageNet.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		D947C7432595355D0026589E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D947C74A259538860026589E /* GarbageVisionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarbageVisionView.swift; sourceTree = "<group>"; };
 		D947C74D25956D130026589E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		D947C750259587330026589E /* GarbageNet.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = GarbageNet.mlmodel; path = Models/GarbageNet.mlmodel; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				D947C7392595355C0026589E /* Assets.xcassets */,
 				D947C73E2595355C0026589E /* Persistence.swift */,
 				D947C7432595355D0026589E /* Info.plist */,
+				D947C750259587330026589E /* GarbageNet.mlmodel */,
 				D947C7402595355C0026589E /* GarbageVision.xcdatamodeld */,
 				D947C73B2595355C0026589E /* Preview Content */,
 				D947C74A259538860026589E /* GarbageVisionView.swift */,
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D947C74B259538860026589E /* GarbageVisionView.swift in Sources */,
+				D947C751259587330026589E /* GarbageNet.mlmodel in Sources */,
 				D947C73F2595355C0026589E /* Persistence.swift in Sources */,
 				D947C7382595355C0026589E /* ContentView.swift in Sources */,
 				D947C74E25956D130026589E /* ImagePicker.swift in Sources */,
