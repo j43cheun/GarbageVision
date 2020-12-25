@@ -49,7 +49,7 @@ struct GarbageVisionView: View {
                 .zIndex(1)
             }
             .navigationBarTitle(self.navigationBarTitle)
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 
     private var navigationBarTitle: String {
