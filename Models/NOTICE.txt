@@ -1,0 +1,2 @@
+The dataset for the GarbageNet model is taken from the following GitHub repository by Gary Thung:
+https://github.com/garythung/trashnet.git
