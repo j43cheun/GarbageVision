@@ -21,37 +21,21 @@ struct GarbageVisionView: View {
     @State
     private var imagePickerSourceType: UIImagePickerController.SourceType
 
+    @State
+    private var showConfidenceScores: Bool
+
     init() {
         self.classifier = GarbageClassifier()
         self._showImageSources = .init(initialValue: false)
         self._showImagePicker = .init(initialValue: false)
         self._imagePickerSourceType = .init(initialValue: UIImagePickerController.SourceType.photoLibrary)
+        self._showConfidenceScores = .init(initialValue: false)
     }
 
     var body: some View {
         NavigationView {
             ZStack {
-                VStack {
-                    if self.classifier.isProcessing {
-                        Text("Please wait...")
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
-                    } else {
-                        if let image = self.classifier.image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 300)
-                                .padding()
-                            Spacer()
-                        } else {
-                            Text("Press the button below to identify garbage")
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-                .zIndex(0)
+                self.imageView.zIndex(0)
                 VStack {
                     Spacer()
                     self.identifyImageButton
@@ -68,7 +52,7 @@ struct GarbageVisionView: View {
         }
     }
 
-    var navigationBarTitle: String {
+    private var navigationBarTitle: String {
         var title = "Garbage Vision"
 
         if self.classifier.isProcessing {
@@ -81,7 +65,7 @@ struct GarbageVisionView: View {
         return title.capitalized
     }
 
-    var identifyImageButton: some View {
+    private var identifyImageButton: some View {
         Button(action: {
             self.showImageSources = true
         }, label: {
@@ -100,11 +84,11 @@ struct GarbageVisionView: View {
         .cornerRadius(38.5)
     }
 
-    var imageSources: ActionSheet {
+    private var imageSources: ActionSheet {
         ActionSheet(title: Text("Image Source"), buttons: self.imageSourceOptions)
     }
 
-    var imageSourceOptions: [ActionSheet.Button] {
+    private var imageSourceOptions: [ActionSheet.Button] {
         var buttons = [ActionSheet.Button]()
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -124,13 +108,77 @@ struct GarbageVisionView: View {
         return buttons
     }
 
-    var imagePicker: ImagePicker {
+    private var imagePicker: ImagePicker {
         ImagePicker(sourceType: self.imagePickerSourceType) { image in
             if image != nil {
                 self.classifier.classify(image: image!)
             }
 
             self.showImagePicker = false
+        }
+    }
+
+    private var imageView: some View {
+        VStack {
+            if self.classifier.isProcessing {
+                Text("Please wait...")
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+            } else {
+                if let image = self.classifier.image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 300)
+                        .padding()
+                    self.confidenceScoresButton
+                        .sheet(isPresented: self.$showConfidenceScores) {
+                            self.confidenceScoresView
+                        }
+                    Spacer()
+                } else {
+                    Text("Press the button below to identify garbage")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    private var confidenceScoresButton: some View {
+        Button(action: {
+            self.showConfidenceScores = true
+        }, label: {
+            Text("View confidence scores")
+                .font(.system(size: 11))
+        })
+    }
+
+    private var confidenceScoresView: some View {
+        VStack(spacing: 0) {
+            ZStack {
+                Text("Confidence Scores").font(.headline).padding()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.showConfidenceScores = false
+                    }, label: { Text("Close") }).padding()
+                }
+            }
+            Form {
+                List {
+                    if let classifications = self.classifier.classifications {
+                        ForEach(classifications.indices) { index in
+                            HStack {
+                                Text(classifications[index].identifier.capitalized)
+                                Spacer()
+                                Text("\(classifications[index].confidence * 100, specifier: "%.2f")")
+                            }
+                            .padding(5)
+                        }
+                    }
+                }
+            }
         }
     }
 }
