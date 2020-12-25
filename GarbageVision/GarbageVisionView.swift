@@ -172,7 +172,7 @@ struct GarbageVisionView: View {
                             HStack {
                                 Text(classifications[index].identifier.capitalized)
                                 Spacer()
-                                Text("\(classifications[index].confidence * 100, specifier: "%.2f")")
+                                Text("\(classifications[index].confidence * 100, specifier: "%.2f")%")
                             }
                             .padding(5)
                         }
