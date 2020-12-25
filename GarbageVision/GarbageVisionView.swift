@@ -9,6 +9,9 @@ import SwiftUI
 
 struct GarbageVisionView: View {
 
+    @ObservedObject
+    var classifier: GarbageClassifier
+
     @State
     private var showImageSources: Bool
 
@@ -18,31 +21,34 @@ struct GarbageVisionView: View {
     @State
     private var imagePickerSourceType: UIImagePickerController.SourceType
 
-    @State
-    private var image: UIImage?
-
     init() {
+        self.classifier = GarbageClassifier()
         self._showImageSources = .init(initialValue: false)
         self._showImagePicker = .init(initialValue: false)
         self._imagePickerSourceType = .init(initialValue: UIImagePickerController.SourceType.photoLibrary)
-        self.image = nil
     }
 
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
-                    if let image = self.image {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 300)
-                            .padding()
-                        Spacer()
-                    } else {
-                        Text("Press the button below to identify garbage")
+                    if self.classifier.isProcessing {
+                        Text("Please wait...")
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
+                    } else {
+                        if let image = self.classifier.image {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 300)
+                                .padding()
+                            Spacer()
+                        } else {
+                            Text("Press the button below to identify garbage")
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
                 .zIndex(0)
@@ -58,8 +64,21 @@ struct GarbageVisionView: View {
                 }
                 .zIndex(1)
             }
-            .navigationBarTitle("Garbage Vision")
+            .navigationBarTitle(self.navigationBarTitle)
         }
+    }
+
+    var navigationBarTitle: String {
+        var title = "Garbage Vision"
+
+        if self.classifier.isProcessing {
+            title = "Loading..."
+        } else
+        if self.classifier.label != nil {
+            title = self.classifier.label!
+        }
+
+        return title.capitalized
     }
 
     var identifyImageButton: some View {
@@ -107,7 +126,10 @@ struct GarbageVisionView: View {
 
     var imagePicker: ImagePicker {
         ImagePicker(sourceType: self.imagePickerSourceType) { image in
-            self.image = image // TODO
+            if image != nil {
+                self.classifier.classify(image: image!)
+            }
+
             self.showImagePicker = false
         }
     }
